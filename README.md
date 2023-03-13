@@ -1,4 +1,4 @@
-# LaucnhBar Action to search/list Swift Evolution Proposals
+# LaunchBar Action to search/list Swift Evolution Proposals
 
 Inspired by https://oleb.net/blog/2023/alfred-swift-evolution/ this is a copy
 of the Alfred workflow https://github.com/attaswift/alfred-swift-evolution/,
