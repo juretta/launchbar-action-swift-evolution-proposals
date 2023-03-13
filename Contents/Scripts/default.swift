@@ -122,15 +122,10 @@ extension Proposal {
 ///
 /// Documentation: <https://developer.obdev.at/resources/documentation/launchbar-developer-documentation/#/script-output>
 struct Item: Encodable {
-    /// A unique identifier for the item which allows Alfred to learn about this item for subsequent
-    /// sorting and ordering of the user's actioned results.
-    ///
-    /// If you would like Alfred to always show the results in the order you return them from your
-    /// script, exclude the UID field.
-    var uid: String?
-    /// The title displayed in the result row.
+    /// The item’s title. This key is required, except when one of the following is present: path, url or actionBundleIdentifier.
     var title: String
-    /// The subtitle displayed in the result row.
+
+    /// An optional subtitle that appears below or next to the title (depending on the user’s selected theme).
     var subtitle: String?
 
     /// An optional text that appears right–aligned.
@@ -150,7 +145,6 @@ struct Item: Encodable {
 
 extension Item {
     init(proposal: Proposal) {
-        self.uid = proposal.url.absoluteString
         self.title = "\(proposal.id): \(proposal.title)"
         self.subtitle = "\(proposal.status.description) • \(proposal.title)"
         self.label = proposal.id
@@ -171,7 +165,6 @@ extension Item {
         var errorInfo = ""
         dump(error, to: &errorInfo)
         self.init(
-            uid: "status", // Identifier for status messages
             title: title,
             subtitle: errorInfo
         )
