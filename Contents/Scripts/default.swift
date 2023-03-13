@@ -146,7 +146,7 @@ struct Item: Encodable {
 extension Item {
     init(proposal: Proposal) {
         self.title = "\(proposal.id): \(proposal.title)"
-        self.subtitle = "\(proposal.status.description) • \(proposal.title)"
+        self.subtitle = "\(proposal.title)"
         self.label = proposal.id
         self.url = proposal.url.absoluteString
         self.badge = proposal.status.description
