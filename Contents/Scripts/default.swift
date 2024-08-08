@@ -10,10 +10,14 @@
 
 import Foundation
 
+struct ProposalContainer: Decodable {
+    var proposals: [ProposalDTO]
+}
+
 /// Data transfer object definition for a Swift Evolution proposal in the
 /// JSON format used by swift.org.
 struct ProposalDTO: Decodable {
-    static let dataURL = URL(string: "https://download.swift.org/swift-evolution/proposals.json")!
+    static let dataURL = URL(string: "https://download.swift.org/swift-evolution/v1/evolution.json")!
 
     var id: String
     var title: String
@@ -82,18 +86,18 @@ extension Proposal {
 
         init(dto: ProposalDTO.Status) {
             switch dto.state {
-            case ".awaitingReview": self = .awaitingReview
-            case ".scheduledForReview": self = .scheduledForReview
-            case ".activeReview": self = .activeReview
-            case ".returnedForRevision": self = .returnedForRevision
-            case ".withdrawn": self = .withdrawn
-            case ".deferred": self = .deferred
-            case ".accepted": self = .accepted
-            case ".acceptedWithRevisions": self = .acceptedWithRevisions
-            case ".rejected": self = .rejected
-            case ".implemented": self = .implemented
-            case ".previewing": self = .previewing
-            case ".error": self = .error
+            case "awaitingReview": self = .awaitingReview
+            case "scheduledForReview": self = .scheduledForReview
+            case "activeReview": self = .activeReview
+            case "returnedForRevision": self = .returnedForRevision
+            case "withdrawn": self = .withdrawn
+            case "deferred": self = .deferred
+            case "accepted": self = .accepted
+            case "acceptedWithRevisions": self = .acceptedWithRevisions
+            case "rejected": self = .rejected
+            case "implemented": self = .implemented
+            case "previewing": self = .previewing
+            case "error": self = .error
             default: self = .unknown(status: dto.state)
             }
         }
@@ -178,8 +182,8 @@ let result: [Item]
 do {
     let data = try Data(contentsOf: ProposalDTO.dataURL)
     let decoder = JSONDecoder()
-    let allProposals = try decoder.decode([ProposalDTO].self, from: data)
-    result = allProposals
+    let allProposals = try decoder.decode(ProposalContainer.self, from: data)
+    result = allProposals.proposals
         .map(Proposal.init(dto:))
         .filter { $0.matches(query) }
         .sorted { ($0.number ?? 0) > ($1.number ?? 0) }
